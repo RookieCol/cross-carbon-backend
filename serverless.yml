@@ -1,0 +1,28 @@
+service: footprint
+
+app: footprint
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: sa-east-1
+  environment:
+    API_KEY: ${file(./config.${opt:stage, 'dev'}.json):API_KEY}
+
+functions:
+  grocery:
+    handler: src/grocery.calculate
+    events:
+      - http:
+          path: /grocery
+          method: get
+
+  travel:
+    handler: src/travel.calculate
+    events:
+      - http:
+          path: /travel
+          method: get
